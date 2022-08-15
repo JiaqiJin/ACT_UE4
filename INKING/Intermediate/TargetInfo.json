@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "INKING",
+			"Path": "D:\\VisualStudio\\UE4\\ACT_UE4\\INKING\\Source\\INKING.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "INKINGEditor",
+			"Path": "D:\\VisualStudio\\UE4\\ACT_UE4\\INKING\\Source\\INKINGEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
