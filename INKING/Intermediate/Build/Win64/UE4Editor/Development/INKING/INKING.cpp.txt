@@ -1,2 +1,0 @@
-D:\VisualStudio\UE4\ACT_UE4\INKING\Intermediate\Build\Win64\UE4Editor\Development\INKING\Definitions.INKING.h
-D:\VisualStudio\UE4\ACT_UE4\INKING\Source\INKING\INKING.h
