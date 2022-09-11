@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
+#include "AbilitySystemComponent.h"
+#include "Character/King_CharacterBase.h"
 #include "KingCharacter.generated.h"
 
 UCLASS(config=Game)
-class AKingCharacter : public ACharacter
+class AKingCharacter : public AKing_CharacterBase
 {
 	GENERATED_BODY()
 
