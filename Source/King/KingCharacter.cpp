@@ -8,6 +8,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GAS/King_AbilitySystemComponent.h"
+#include "King.h"
+#include "Datas/GameplayAbilityDatas/King_GameplayAbilityDatas.h"
+#include "Datas/King_AssetManager.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AKingCharacter
@@ -43,8 +47,58 @@ AKingCharacter::AKingCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	AbilitySystemComponent = CreateDefaultSubobject<UKing_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+}
+
+void AKingCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	LoadAllGameplayAbilities();
+}
+
+void AKingCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AKingCharacter::LoadAllGameplayAbilities()
+{
+	UKing_AssetManager& AssetManager = UKing_AssetManager::Get();
+	TArray<FPrimaryAssetId> AbilitiesIDs;
+	if (AssetManager.IsValid())
+	{
+		AssetManager.GetPrimaryAssetIdList(AssetManager.PlayerGameplayAbility, AbilitiesIDs);
+		for (auto& AbilitiesID : AbilitiesIDs)
+		{
+			//AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID)
+			UKing_GameplayAbilityDatas* AbilitiesInfoDatas = AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID);
+			if (AbilitiesInfoDatas)
+			{
+				LoadGameplayAbilities(AbilitiesInfoDatas);
+			}
+		}
+	}
+}
+
+void AKingCharacter::LoadGameplayAbilities(UKing_GameplayAbilityDatas* Datas)
+{
+	if (!AbilitySystemComponent.IsValid())
+	{
+		return;
+	}
+
+	for (FKingGameplayAbilityInfo AbilityData : Datas->Abilities)
+	{
+		if (!AbilityData.Ability)
+		{
+			return;
+		}
+		FGameplayAbilitySpec AbilitySpec(AbilityData.Ability, 1, static_cast<uint32>(AbilityData.AbilityKeys), this);
+		AbilitySystemComponent->GiveAbility(AbilitySpec.Ability);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,34 +122,8 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AKingCharacter::LookUpAtRate);
 
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &AKingCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &AKingCharacter::TouchStopped);
-
-	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AKingCharacter::OnResetVR);
-}
-
-
-void AKingCharacter::OnResetVR()
-{
-	// If King is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in King.Build.cs is not automatically propagated
-	// and a linker error will result.
-	// You will need to either:
-	//		Add "HeadMountedDisplay" to [YourProject].Build.cs PublicDependencyModuleNames in order to build successfully (appropriate if supporting VR).
-	// or:
-	//		Comment or delete the call to ResetOrientationAndPosition below (appropriate if not supporting VR)
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
-
-void AKingCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		Jump();
-}
-
-void AKingCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		StopJumping();
+	AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"),
+		FString("CancelTarget"), FString("EKingAbilityInputID"), static_cast<int32>(EKingAbilityInputID::Type::Confirm), static_cast<int32>(EKingAbilityInputID::Type::Cancel)));
 }
 
 void AKingCharacter::TurnAtRate(float Rate)

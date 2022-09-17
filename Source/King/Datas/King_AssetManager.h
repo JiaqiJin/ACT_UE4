@@ -17,6 +17,7 @@ public:
 
 	static const FPrimaryAssetType SkillType;
 	static const FPrimaryAssetType MotionType;
+	static const FPrimaryAssetType PlayerGameplayAbility;
 
 	/** Returns the current AssetManager object */
 	static UKing_AssetManager& Get();

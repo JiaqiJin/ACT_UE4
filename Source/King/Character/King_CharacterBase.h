@@ -9,6 +9,7 @@
 #include "King_CharacterBase.generated.h"
 
 class UKing_AbilitySystemComponent;
+class UKing_GameplayAbilityDatas;
 
 UCLASS()
 class KING_API AKing_CharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -20,6 +21,7 @@ public:
 	AKing_CharacterBase();
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

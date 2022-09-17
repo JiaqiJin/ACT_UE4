@@ -3,6 +3,8 @@
 
 #include "Character/King_CharacterBase.h"
 #include "GAS/King_AbilitySystemComponent.h"
+#include "Datas/King_AssetManager.h"
+#include "Datas/GameplayAbilityDatas/King_GameplayAbilityDatas.h"
 
 // Sets default values
 AKing_CharacterBase::AKing_CharacterBase()
