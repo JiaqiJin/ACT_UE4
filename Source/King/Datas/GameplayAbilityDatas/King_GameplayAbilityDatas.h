@@ -8,6 +8,7 @@
 #include "King_GameplayAbilityDatas.generated.h"
 
 class UAbilitySystemComponent;
+class AKing_CharacterBase;
 
 USTRUCT(BlueprintType)
 struct FKingGameplayAbilityInfo
@@ -33,4 +34,7 @@ public:
 	// Array of abilities
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TArray<FKingGameplayAbilityInfo> Abilities;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TSubclassOf<AKing_CharacterBase> Owner;
 };

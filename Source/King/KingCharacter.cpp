@@ -10,8 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GAS/King_AbilitySystemComponent.h"
 #include "King.h"
-#include "Datas/GameplayAbilityDatas/King_GameplayAbilityDatas.h"
-#include "Datas/King_AssetManager.h"
+#include "Component/Player/King_PlayerAbilityComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AKingCharacter
@@ -47,7 +46,9 @@ AKingCharacter::AKingCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	// Component
 	AbilitySystemComponent = CreateDefaultSubobject<UKing_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	PlayerAbilityComponent = CreateDefaultSubobject<UKing_PlayerAbilityComponent>(TEXT("PlayerAbilityComponent"));
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -56,49 +57,12 @@ void AKingCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	LoadAllGameplayAbilities();
+	PlayerAbilityComponent->LoadAllGameplayAbilities();
 }
 
 void AKingCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void AKingCharacter::LoadAllGameplayAbilities()
-{
-	UKing_AssetManager& AssetManager = UKing_AssetManager::Get();
-	TArray<FPrimaryAssetId> AbilitiesIDs;
-	if (AssetManager.IsValid())
-	{
-		AssetManager.GetPrimaryAssetIdList(AssetManager.PlayerGameplayAbility, AbilitiesIDs);
-		for (auto& AbilitiesID : AbilitiesIDs)
-		{
-			//AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID)
-			UKing_GameplayAbilityDatas* AbilitiesInfoDatas = AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID);
-			if (AbilitiesInfoDatas)
-			{
-				LoadGameplayAbilities(AbilitiesInfoDatas);
-			}
-		}
-	}
-}
-
-void AKingCharacter::LoadGameplayAbilities(UKing_GameplayAbilityDatas* Datas)
-{
-	if (!AbilitySystemComponent.IsValid())
-	{
-		return;
-	}
-
-	for (FKingGameplayAbilityInfo AbilityData : Datas->Abilities)
-	{
-		if (!AbilityData.Ability)
-		{
-			return;
-		}
-		FGameplayAbilitySpec AbilitySpec(AbilityData.Ability, 1, static_cast<uint32>(AbilityData.AbilityKeys), this);
-		AbilitySystemComponent->GiveAbility(AbilitySpec.Ability);
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -9,18 +9,12 @@
 #include "Character/King_CharacterBase.h"
 #include "KingCharacter.generated.h"
 
+class UKing_PlayerAbilityComponent;
+
 UCLASS(config=Game)
 class AKingCharacter : public AKing_CharacterBase
 {
 	GENERATED_BODY()
-
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	/** Follow camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
 public:
 	AKingCharacter();
 
@@ -62,8 +56,16 @@ protected:
 
 	virtual void PossessedBy(AController* NewController) override;
 
-	virtual void LoadAllGameplayAbilities();
-	void LoadGameplayAbilities(UKing_GameplayAbilityDatas* Datas);
+	// Variables
+	UKing_PlayerAbilityComponent* PlayerAbilityComponent = nullptr;
+
+	/** Camera boom positioning the camera behind the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* FollowCamera;
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
