@@ -11,6 +11,8 @@
 #include "GAS/King_AbilitySystemComponent.h"
 #include "King.h"
 #include "Component/Player/King_PlayerAbilityComponent.h"
+#include "Component/Player/King_CombatComponent.h"
+#include "King_Types.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AKingCharacter
@@ -49,6 +51,7 @@ AKingCharacter::AKingCharacter()
 	// Component
 	AbilitySystemComponent = CreateDefaultSubobject<UKing_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	PlayerAbilityComponent = CreateDefaultSubobject<UKing_PlayerAbilityComponent>(TEXT("PlayerAbilityComponent"));
+	CombatComponent = CreateDefaultSubobject<UKing_CombatComponent>(TEXT("CombatComponent"));
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -65,6 +68,21 @@ void AKingCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AKingCharacter::CombatAttack(const FName& InKey)
+{
+	NormalAttack(InKey);
+}
+
+void AKingCharacter::NormalAttack(const FName& InKey)
+{
+	CombatComponent->NormalAttack(InKey);
+}
+
+FSimpleCombatCheck* AKingCharacter::GetSimpleCombatInfo()
+{
+	return CombatComponent->GetSimpleCombatInfo();
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -77,6 +95,11 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AKingCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AKingCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("MouseLeftClick", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
+	PlayerInputComponent->BindAction("MouseLeftClieck", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
+	PlayerInputComponent->BindAction("MouseRightClick", IE_Pressed, this, &AKingCharacter::MouseRightClick);
+	PlayerInputComponent->BindAction("MouseRightClickReleased", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -129,4 +152,24 @@ void AKingCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AKingCharacter::MouseLeftClick()
+{
+	GetSimpleCombatInfo()->Press();
+}
+
+void AKingCharacter::MouseRightClick()
+{
+
+}
+
+void AKingCharacter::MouseLeftClickReleased()
+{
+	GetSimpleCombatInfo()->Released();
+}
+
+void AKingCharacter::MouseRightClickReleased()
+{
+
 }

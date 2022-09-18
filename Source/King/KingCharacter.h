@@ -7,16 +7,22 @@
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
 #include "Character/King_CharacterBase.h"
+#include "Interface/King_CombatInterface.h"
 #include "KingCharacter.generated.h"
 
 class UKing_PlayerAbilityComponent;
+class UKing_CombatComponent;
 
 UCLASS(config=Game)
-class AKingCharacter : public AKing_CharacterBase
+class AKingCharacter : public AKing_CharacterBase, public IKing_CombatInterface
 {
 	GENERATED_BODY()
 public:
 	AKingCharacter();
+
+	void NormalAttack(const FName& InKey);
+	virtual void CombatAttack(const FName& InKey);
+	virtual FSimpleCombatCheck* GetSimpleCombatInfo();
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -46,6 +52,11 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
+	void MouseLeftClick();
+	void MouseRightClick();
+	void MouseLeftClickReleased();
+	void MouseRightClickReleased();
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -58,6 +69,7 @@ protected:
 
 	// Variables
 	UKing_PlayerAbilityComponent* PlayerAbilityComponent = nullptr;
+	UKing_CombatComponent* CombatComponent = nullptr;
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
