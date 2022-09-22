@@ -97,7 +97,7 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveRight", this, &AKingCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("MouseLeftClick", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
-	PlayerInputComponent->BindAction("MouseLeftClieck", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
+	PlayerInputComponent->BindAction("MouseLeftClickReleased", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
 	PlayerInputComponent->BindAction("MouseRightClick", IE_Pressed, this, &AKingCharacter::MouseRightClick);
 	PlayerInputComponent->BindAction("MouseRightClickReleased", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
 
@@ -156,6 +156,7 @@ void AKingCharacter::MoveRight(float Value)
 
 void AKingCharacter::MouseLeftClick()
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MouseLeftClick"));
 	GetSimpleCombatInfo()->Press();
 }
 
@@ -166,6 +167,7 @@ void AKingCharacter::MouseRightClick()
 
 void AKingCharacter::MouseLeftClickReleased()
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MouseLeftClickReleased"));
 	GetSimpleCombatInfo()->Released();
 }
 
