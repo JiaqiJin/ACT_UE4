@@ -20,5 +20,5 @@ public:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimNotifyState_CheckCombo")
-	FName JumpSection;
+	FName JumpSectionName;
 };
