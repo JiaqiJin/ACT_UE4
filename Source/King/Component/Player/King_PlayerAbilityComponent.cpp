@@ -66,7 +66,7 @@ void UKing_PlayerAbilityComponent::LoadGameplayAbilities(UKing_GameplayAbilityDa
 			{
 				return;
 			}
-			FGameplayAbilitySpec AbilitySpec(AbilityData.Ability, 1, static_cast<uint32>(AbilityData.AbilityKeys), this);
+			FGameplayAbilitySpec AbilitySpec(AbilityData.Ability, 1, static_cast<int32>(AbilityData.AbilityKeys), this);
 			AbilitySystemComponent->GiveAbility(AbilitySpec.Ability);
 		}
 	}

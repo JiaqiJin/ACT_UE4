@@ -59,13 +59,13 @@ AKingCharacter::AKingCharacter()
 void AKingCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
-	PlayerAbilityComponent->LoadAllGameplayAbilities();
 }
 
 void AKingCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	PlayerAbilityComponent->LoadAllGameplayAbilities();
 }
 
 void AKingCharacter::CombatAttack(const FName& InKey)
@@ -96,10 +96,10 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveForward", this, &AKingCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AKingCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction("MouseLeftClick", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
-	PlayerInputComponent->BindAction("MouseLeftClickReleased", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
-	PlayerInputComponent->BindAction("MouseRightClick", IE_Pressed, this, &AKingCharacter::MouseRightClick);
-	PlayerInputComponent->BindAction("MouseRightClickReleased", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
+	PlayerInputComponent->BindAction("AttackReleased", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
+	PlayerInputComponent->BindAction("HeavyAttack", IE_Pressed, this, &AKingCharacter::MouseRightClick);
+	PlayerInputComponent->BindAction("HeavyAttackReleased", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -109,7 +109,7 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AKingCharacter::LookUpAtRate);
 
-	AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"),
+	AbilitySystemComponent->BindAbilityActivationToInputComponent(PlayerInputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"),
 		FString("CancelTarget"), FString("EKingAbilityInputID"), static_cast<int32>(EKingAbilityInputID::Type::Confirm), static_cast<int32>(EKingAbilityInputID::Type::Cancel)));
 }
 
