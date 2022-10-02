@@ -89,9 +89,28 @@ public:
 	FGameplayAttributeData MoveSpeed;
 	ATTRIBUTE_ACCESSORS(UKing_AttributeSet, MoveSpeed)
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Character|Attributes")
+	FGameplayAttributeData MovementMultiplier;
+	ATTRIBUTE_ACCESSORS(UKing_AttributeSet, MovementMultiplier);
+
+	// Jump Attribute
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Character|Attributes")
+	FGameplayAttributeData JumpHeight;
+	ATTRIBUTE_ACCESSORS(UKing_AttributeSet, JumpHeight);
+
+	// Jump Multiplier Attribute
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Character|Attributes")
+	FGameplayAttributeData JumpHeightMultiplier;
+	ATTRIBUTE_ACCESSORS(UKing_AttributeSet, JumpHeightMultiplier);
+
 	UPROPERTY(BlueprintReadOnly, Category = "Character Level")
 	FGameplayAttributeData CharacterLevel;
 	ATTRIBUTE_ACCESSORS(UKing_AttributeSet, CharacterLevel)
+
+	// Air Multiplier Attribute
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Character|Attributes")
+	FGameplayAttributeData AirControl;
+	ATTRIBUTE_ACCESSORS(UKing_AttributeSet, AirControl);
 
 protected:
 	// Helper function to proportionally adjust the value of an attribute when it's associated max attribute changes.

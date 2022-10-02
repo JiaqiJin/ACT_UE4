@@ -12,26 +12,22 @@
 
 class UKing_PlayerAbilityComponent;
 class UKing_CombatComponent;
+class UKing_CharacterMovementComponent;
 
 UCLASS(config=Game)
 class AKingCharacter : public AKing_CharacterBase, public IKing_CombatInterface
 {
 	GENERATED_BODY()
 public:
-	AKingCharacter();
+	AKingCharacter(const class FObjectInitializer& InitializerObject);
 
 	void NormalAttack(const FName& InKey);
 	virtual void CombatAttack(const FName& InKey);
 	virtual FSimpleCombatCheck* GetSimpleCombatInfo();
 
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseLookUpRate;
-
+	// Getters
+	UFUNCTION(BlueprintPure, Category = "Player|Component|MovementComponent")
+	UKing_CharacterMovementComponent* GetPlayerCharacterMovementComponent() const;
 protected:
 
 	/** Called for forwards/backward input */
@@ -78,7 +74,16 @@ protected:
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
 public:
+	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float BaseTurnRate;
+
+	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float BaseLookUpRate;
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/

@@ -10,6 +10,7 @@
 
 class UKing_AbilitySystemComponent;
 class UKing_GameplayAbilityDatas;
+class UKing_AttributeSet;
 
 UCLASS()
 class KING_API AKing_CharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -18,9 +19,33 @@ class KING_API AKing_CharacterBase : public ACharacter, public IAbilitySystemInt
 
 public:
 	// Sets default values for this character's properties
-	AKing_CharacterBase();
+	AKing_CharacterBase(const class FObjectInitializer& InitializerObject);
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetMovementSpeed() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetMovementSpeedBaseValue() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetMovementSpeedMultiplier() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetMovementSpeedMultiplierBase() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetJumpHeight() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetJumpHeightMultiplier() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetAirControl() const;
+
+	UFUNCTION(BlueprintPure, Category = "MovementComponent")
+	float GetCurrentLevel() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,5 +55,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// The core ActorComponent for interfacing with the GameplayAbilities System
 	TWeakObjectPtr<UKing_AbilitySystemComponent> AbilitySystemComponent;
+
+	// Player Attribute Set
+	TWeakObjectPtr<UKing_AttributeSet> PlayerAttributes;
 };

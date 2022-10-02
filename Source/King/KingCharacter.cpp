@@ -13,11 +13,14 @@
 #include "Component/Player/King_PlayerAbilityComponent.h"
 #include "Component/Player/King_CombatComponent.h"
 #include "King_Types.h"
+#include "Component/Player/King_CharacterMovementComponent.h"
+#include "GAS/King_AttributeSet.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AKingCharacter
 
-AKingCharacter::AKingCharacter()
+AKingCharacter::AKingCharacter(const class FObjectInitializer& InitializerObject)
+	: Super(InitializerObject.SetDefaultSubobjectClass<UKing_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -52,8 +55,17 @@ AKingCharacter::AKingCharacter()
 	AbilitySystemComponent = CreateDefaultSubobject<UKing_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	PlayerAbilityComponent = CreateDefaultSubobject<UKing_PlayerAbilityComponent>(TEXT("PlayerAbilityComponent"));
 	CombatComponent = CreateDefaultSubobject<UKing_CombatComponent>(TEXT("CombatComponent"));
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	PlayerAttributes = CreateDefaultSubobject<UKing_AttributeSet>(TEXT("AttributeSet"));
+
+	UKing_CharacterMovementComponent* MovementComponent = Cast<UKing_CharacterMovementComponent>(GetCharacterMovement());
+	if (MovementComponent)
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
+		GetCharacterMovement()->JumpZVelocity = 600.f;
+		GetCharacterMovement()->AirControl = 0.2f;
+	}
 }
 
 void AKingCharacter::PossessedBy(AController* NewController)
@@ -81,6 +93,17 @@ void AKingCharacter::NormalAttack(const FName& InKey)
 FSimpleCombatCheck* AKingCharacter::GetSimpleCombatInfo()
 {
 	return CombatComponent->GetSimpleCombatInfo();
+}
+
+UKing_CharacterMovementComponent* AKingCharacter::GetPlayerCharacterMovementComponent() const
+{
+	UKing_CharacterMovementComponent* MovementComponent = Cast<UKing_CharacterMovementComponent>(GetCharacterMovement());
+	if (MovementComponent)
+	{
+		return MovementComponent;
+	}
+
+	return nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////
