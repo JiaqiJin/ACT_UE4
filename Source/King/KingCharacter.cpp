@@ -71,13 +71,15 @@ AKingCharacter::AKingCharacter(const class FObjectInitializer& InitializerObject
 void AKingCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
+	InitializePassiveAttributes();
+
+	PlayerAbilityComponent->LoadAllGameplayAbilities();
 }
 
 void AKingCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	PlayerAbilityComponent->LoadAllGameplayAbilities();
 }
 
 void AKingCharacter::CombatAttack(const FName& InKey)
@@ -119,10 +121,10 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveForward", this, &AKingCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AKingCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
-	PlayerInputComponent->BindAction("AttackReleased", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
+	PlayerInputComponent->BindAction("MouseLeftClick", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
+	PlayerInputComponent->BindAction("MouseLeftClickReleased", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
 	PlayerInputComponent->BindAction("HeavyAttack", IE_Pressed, this, &AKingCharacter::MouseRightClick);
-	PlayerInputComponent->BindAction("HeavyAttackReleased", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
+	PlayerInputComponent->BindAction("HeavyAttack", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -180,7 +182,16 @@ void AKingCharacter::MoveRight(float Value)
 void AKingCharacter::MouseLeftClick()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MouseLeftClick"));
+	
 	GetSimpleCombatInfo()->Press();
+
+	FGameplayTagContainer TagContainer;
+	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.LightAttack")));
+	
+	if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
+	{
+		return;
+	}
 }
 
 void AKingCharacter::MouseRightClick()

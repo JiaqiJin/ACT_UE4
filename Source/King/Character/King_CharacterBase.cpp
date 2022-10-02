@@ -30,6 +30,36 @@ void AKing_CharacterBase::Tick(float DeltaTime)
 
 }
 
+void AKing_CharacterBase::InitializePassiveAttributes()
+{
+	if (!AbilitySystemComponent.IsValid())
+	{
+		return;
+	}
+
+	if (PassiveGameplayEffects.Num() > 0)
+	{
+		EffectContext = AbilitySystemComponent->MakeEffectContext();
+		EffectContext.AddSourceObject(this);
+
+		for (TSubclassOf<UGameplayEffect>& GameplayEffect : PassiveGameplayEffects)
+		{
+			ApplyGameplayeEffectToPlayerWithParam(GameplayEffect);
+		}
+	}
+}
+
+void AKing_CharacterBase::ApplyGameplayeEffectToPlayerWithParam(TSubclassOf<UGameplayEffect> GameplayEffect)
+{
+	
+	FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, GetCurrentLevel(), EffectContext);
+	if (NewHandle.IsValid())
+	{
+		FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(),
+			AbilitySystemComponent.Get());
+	}
+}
+
 UAbilitySystemComponent* AKing_CharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent.Get();

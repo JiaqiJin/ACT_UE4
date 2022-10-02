@@ -6,6 +6,7 @@
 #include "King_Types.h"
 #include "Animation/AnimInstance.h"
 #include "KingCharacter.h"
+#include "Character/King_CharacterBase.h"
 
 void UKing_ComboCheckAnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
@@ -22,7 +23,7 @@ void UKing_ComboCheckAnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, U
 void UKing_ComboCheckAnimNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
-
+	
 	AKingCharacter* PlayerCharacter = Cast<AKingCharacter>(MeshComp->GetOwner());
 	if (PlayerCharacter)
 	{
@@ -39,11 +40,11 @@ void UKing_ComboCheckAnimNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAn
 {
 	Super::NotifyEnd(MeshComp, Animation);
 
-	/*if (IKing_CombatInterface* InCharacter = Cast<IKing_CombatInterface>(MeshComp->GetOuter()))
+	if (IKing_CombatInterface* InCharacter = Cast<IKing_CombatInterface>(MeshComp->GetOuter()))
 	{
 		if ((InCharacter->GetSimpleCombatInfo()->bLongPress || InCharacter->GetSimpleCombatInfo()->bShortPress))
 		{
 			
 		}
-	}*/
+	}
 }

@@ -21,6 +21,12 @@ public:
 	// Sets default values for this character's properties
 	AKing_CharacterBase(const class FObjectInitializer& InitializerObject);
 
+	UFUNCTION(BlueprintCallable)
+	virtual void ApplyGameplayeEffectToPlayerWithParam(TSubclassOf<UGameplayEffect> GameplayEffect);
+
+	UFUNCTION()
+	virtual void InitializePassiveAttributes();
+
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
@@ -51,9 +57,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	FGameplayEffectContextHandle EffectContext;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	// Default attributes for a character for initializing
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Player|GameplayEffect")
+	TArray<TSubclassOf<UGameplayEffect>> PassiveGameplayEffects;
 
 	// The core ActorComponent for interfacing with the GameplayAbilities System
 	TWeakObjectPtr<UKing_AbilitySystemComponent> AbilitySystemComponent;
