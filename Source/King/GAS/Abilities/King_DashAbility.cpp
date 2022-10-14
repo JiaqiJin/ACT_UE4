@@ -41,6 +41,38 @@ void UKing_DashAbility::ActivateAbility(
 		return;
 	}
 
+	CollisionParams.AddIgnoredActor(GetAvatarActorFromActorInfo());
+
+	if (!Character->GetVelocity().IsNearlyZero(0.0001f))
+	{
+		CharacterForwardVector = Character->GetActorForwardVector();
+		CharacterRightVector = Character->GetActorRightVector();
+		VelocityVector = Character->GetVelocity();
+		VelocityVector.Normalize(0.0001f);
+	}
+
+	float ForwardResult = FVector::DotProduct(CharacterForwardVector, VelocityVector);
+	float RightResult = FVector::DotProduct(CharacterRightVector, VelocityVector);
+
+	if (FMath::IsNearlyEqual(ForwardResult, 1.0f, 0.025f))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Up !!!!");
+	}
+
+	else if (FMath::IsNearlyEqual(ForwardResult, -1.0f, 0.025f))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Down !!!!");
+	}
+
+	else if (FMath::IsNearlyEqual(RightResult, 1.0f, 0.025f))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Left !!!!");
+	}
+
+	else if (FMath::IsNearlyEqual(RightResult, -1.0f, 0.025f))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Rigth !!!!");
+	}
 }
 
 void UKing_DashAbility::EndAbility(

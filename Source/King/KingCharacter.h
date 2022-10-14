@@ -64,7 +64,10 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 
 	// Variables
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Player|Component")
 	UKing_PlayerAbilityComponent* PlayerAbilityComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Player|Component")
 	UKing_CombatComponent* CombatComponent = nullptr;
 
 	/** Camera boom positioning the camera behind the character */

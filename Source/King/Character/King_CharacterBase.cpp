@@ -60,6 +60,30 @@ void AKing_CharacterBase::ApplyGameplayeEffectToPlayerWithParam(TSubclassOf<UGam
 	}
 }
 
+bool AKing_CharacterBase::CharacterCancelAbilities(FGameplayTagContainer& GameplayTagContainer)
+{
+	if (AbilitySystemComponent.IsValid())
+	{
+		TArray<FGameplayAbilitySpec*> AbilitiesToActivate;
+		AbilitySystemComponent->GetActivatableGameplayAbilitySpecsByAllMatchingTags(GameplayTagContainer, AbilitiesToActivate);
+		if (AbilitiesToActivate.Num() > 0)
+		{
+			for (auto& CurrentAbility : AbilitiesToActivate)
+			{
+				if (CurrentAbility->IsActive())
+				{				
+					/*GEngine->AddOnScreenDebugMessage(-1, 200, FColor::Green, FString::Printf(TEXT("Ability Cancel Name :  %s"),
+						*CurrentAbility->Ability->GetName()));*/
+					AbilitySystemComponent->CancelAbility(CurrentAbility->Ability);
+				}
+			}
+		}
+		return true;
+	}
+
+	return false;
+}
+
 UAbilitySystemComponent* AKing_CharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent.Get();

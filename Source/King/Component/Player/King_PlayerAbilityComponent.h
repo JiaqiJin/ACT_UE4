@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "King_PlayerAbilityComponent.generated.h"
 
+class UKing_GameplayAbilityDatas;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class KING_API UKing_PlayerAbilityComponent : public UActorComponent
@@ -16,8 +17,11 @@ public:
 	// Sets default values for this component's properties
 	UKing_PlayerAbilityComponent();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HabilityData")
+	UKing_GameplayAbilityDatas* PlayerAbilityDatas;
+
 	void LoadAllGameplayAbilities();
-	void LoadGameplayAbilities(class UKing_GameplayAbilityDatas* Datas);
+	void LoadGameplayAbilities(UKing_GameplayAbilityDatas* Datas);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

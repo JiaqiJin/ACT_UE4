@@ -48,6 +48,12 @@ protected:
 
 	AKing_CharacterBase* Character;
 
+	FCollisionQueryParams CollisionParams = FCollisionQueryParams(FName("LineTraceSingle"));
+
+	FVector CharacterForwardVector = FVector(0.0f);
+	FVector CharacterRightVector = FVector(0.0f);
+	FVector VelocityVector = FVector(0.0f);
+
 	UFUNCTION()
 	void OnCancelled(FGameplayTag EventTag, FGameplayEventData EventData);
 

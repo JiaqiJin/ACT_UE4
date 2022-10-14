@@ -53,6 +53,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "MovementComponent")
 	float GetCurrentLevel() const;
 
+	bool CharacterCancelAbilities(FGameplayTagContainer& GameplayTagContainer);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
