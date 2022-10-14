@@ -7,9 +7,8 @@
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "King_CancelAbilityAnimNotify.generated.h"
 
-/**
- * 
- */
+class UGameplayAbility;
+
 UCLASS()
 class KING_API UKing_CancelAbilityAnimNotify : public UAnimNotifyState
 {
@@ -22,4 +21,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CancelGameplayTag")
 	FGameplayTag TagToCancelAbility;
+
+private:
+	UGameplayAbility* PlayerAbility;
 };

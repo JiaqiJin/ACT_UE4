@@ -10,7 +10,18 @@
 
 void UKing_CancelAbilityAnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
+	AKingCharacter* PlayerCharacter = Cast<AKingCharacter>(MeshComp->GetOwner());
+	FGameplayTagContainer CancelAbilityTag;
+	if (PlayerCharacter)
+	{
+		UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
+		if (AbilitySystemComponent)
+		{
+			CancelAbilityTag.AddTag(TagToCancelAbility);
 
+			AbilitySystemComponent->CancelAbilities(&CancelAbilityTag);
+		}
+	}
 }
 
 void UKing_CancelAbilityAnimNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
@@ -24,7 +35,6 @@ void UKing_CancelAbilityAnimNotify::NotifyTick(USkeletalMeshComponent* MeshComp,
 			FGameplayTagContainer CancelAbilityTag;
 			CancelAbilityTag.AddTag(TagToCancelAbility);
 
-			//AbilitySystemComponent->CancelAbilities(CancelAbilityTag);
 			PlayerCharacter->CharacterCancelAbilities(CancelAbilityTag);
 		}
 	}
@@ -32,5 +42,5 @@ void UKing_CancelAbilityAnimNotify::NotifyTick(USkeletalMeshComponent* MeshComp,
 
 void UKing_CancelAbilityAnimNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-
+	PlayerAbility = nullptr;
 }

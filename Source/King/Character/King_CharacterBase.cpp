@@ -75,10 +75,10 @@ bool AKing_CharacterBase::CharacterCancelAbilities(FGameplayTagContainer& Gamepl
 					/*GEngine->AddOnScreenDebugMessage(-1, 200, FColor::Green, FString::Printf(TEXT("Ability Cancel Name :  %s"),
 						*CurrentAbility->Ability->GetName()));*/
 					AbilitySystemComponent->CancelAbility(CurrentAbility->Ability);
+					return true;
 				}
 			}
 		}
-		return true;
 	}
 
 	return false;
