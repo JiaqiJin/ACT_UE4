@@ -234,7 +234,6 @@ void AKingCharacter::MouseLeftClickReleased()
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MouseLeftClickReleased"));
 	GetSimpleCombatInfo()->Released();
 	CombatComponent->SetIsAbilityCanceled(false);
-	CombatComponent->SetIsInComboAttack(false);
 }
 
 void AKingCharacter::MouseRightClickReleased()
