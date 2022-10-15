@@ -46,6 +46,8 @@ protected:
 
 	bool bIsCreateOnRunning = false;
 
+	bool bStopWhenAbilityEnds = true;
+
 	AKing_CharacterBase* Character;
 
 	FCollisionQueryParams CollisionParams = FCollisionQueryParams(FName("LineTraceSingle"));
