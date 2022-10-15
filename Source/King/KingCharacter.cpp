@@ -218,10 +218,10 @@ void AKingCharacter::MouseLeftClick()
 	FGameplayTagContainer TagContainer;
 	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.LightAttack")));
 	
-	if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
+	/*if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
 	{
 		return;
-	}
+	}*/
 }
 
 void AKingCharacter::MouseRightClick()
@@ -250,10 +250,10 @@ void AKingCharacter::DashInput()
 	// Check if is in combat
 	if(!CombatComponent->GetIsInComboAttack())
 	{
-		if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
+		/*if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
 		{
 			return;
-		}
+		}*/
 	}
 	
 }

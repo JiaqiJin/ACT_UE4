@@ -17,8 +17,15 @@ AKing_GameState::AKing_GameState()
 // Called when the game starts or when spawned
 void AKing_GameState::BeginPlay()
 {
+    Super::BeginPlay();
+
     // AbilitySystemComponent GiveAbility to player
     ApplyDefaultPlayerGameplayAbilities();
+}
+
+void AKing_GameState::Tick(float DeltaSeconds)
+{
+
 }
 
 void AKing_GameState::ApplyDefaultPlayerGameplayAbilities()
