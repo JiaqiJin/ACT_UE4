@@ -163,7 +163,7 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AKingCharacter::LookUpAtRate);
 
-	AbilitySystemComponent->BindAbilityActivationToInputComponent(PlayerInputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"),
+	AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"),
 		FString("CancelTarget"), FString("EKingAbilityInputID"), static_cast<int32>(EKingAbilityInputID::Type::Confirm), static_cast<int32>(EKingAbilityInputID::Type::Cancel)));
 }
 

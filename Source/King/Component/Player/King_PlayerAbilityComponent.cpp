@@ -32,21 +32,21 @@ void UKing_PlayerAbilityComponent::BeginPlay()
 
 void UKing_PlayerAbilityComponent::LoadAllGameplayAbilities()
 {
-	UKing_AssetManager& AssetManager = UKing_AssetManager::Get();
-	TArray<FPrimaryAssetId> AbilitiesIDs;
-	if (AssetManager.IsValid())
-	{
-		AssetManager.GetPrimaryAssetIdList(AssetManager.PlayerGameplayAbility, AbilitiesIDs);
-		for (auto& AbilitiesID : AbilitiesIDs)
-		{
-			//AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID)
-			UKing_GameplayAbilityDatas* AbilitiesInfoDatas = AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID);
-			if (AbilitiesInfoDatas && AbilitiesInfoDatas->Owner && this->GetOwner()->IsA(AbilitiesInfoDatas->Owner.Get()))
-			{
-				LoadGameplayAbilities(AbilitiesInfoDatas);
-			}
-		}
-	}
+	//UKing_AssetManager& AssetManager = UKing_AssetManager::Get();
+	//TArray<FPrimaryAssetId> AbilitiesIDs;
+	//if (AssetManager.IsValid())
+	//{
+	//	AssetManager.GetPrimaryAssetIdList(AssetManager.PlayerGameplayAbility, AbilitiesIDs);
+	//	for (auto& AbilitiesID : AbilitiesIDs)
+	//	{
+	//		//AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID)
+	//		UKing_GameplayAbilityDatas* AbilitiesInfoDatas = AssetManager.GetPrimaryAssetObject<UKing_GameplayAbilityDatas>(AbilitiesID);
+	//		if (AbilitiesInfoDatas && AbilitiesInfoDatas->Owner && this->GetOwner()->IsA(AbilitiesInfoDatas->Owner.Get()))
+	//		{
+	//			LoadGameplayAbilities(AbilitiesInfoDatas);
+	//		}
+	//	}
+	//}
 }
 
 void UKing_PlayerAbilityComponent::LoadGameplayAbilities(UKing_GameplayAbilityDatas* Datas)
