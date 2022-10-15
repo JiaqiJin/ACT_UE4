@@ -28,31 +28,8 @@ public:
 	// Getters
 	UFUNCTION(BlueprintPure, Category = "Player|Component|MovementComponent")
 	UKing_CharacterMovementComponent* GetPlayerCharacterMovementComponent() const;
-protected:
-
-	/** Called for forwards/backward input */
-	void MoveForward(float Value);
-
-	/** Called for side to side input */
-	void MoveRight(float Value);
-
-	/** 
-	 * Called via input to turn at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void TurnAtRate(float Rate);
-
-	/**
-	 * Called via input to turn look up/down at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void LookUpAtRate(float Rate);
-
-	void MouseLeftClick();
-	void MouseRightClick();
-	void MouseLeftClickReleased();
-	void MouseRightClickReleased();
-
+	UKing_CombatComponent* GetCombatComponent() const;
+	UKing_PlayerAbilityComponent* GetPlayerAbilityComponent() const;
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -78,6 +55,32 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+
+protected:
+	/** Called for forwards/backward input */
+	void MoveForward(float Value);
+
+	/** Called for side to side input */
+	void MoveRight(float Value);
+
+	/**
+	 * Called via input to turn at a given rate.
+	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+	 */
+	void TurnAtRate(float Rate);
+
+	/**
+	 * Called via input to turn look up/down at a given rate.
+	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+	 */
+	void LookUpAtRate(float Rate);
+
+	void MouseLeftClick();
+	void MouseRightClick();
+	void MouseLeftClickReleased();
+	void MouseRightClickReleased();
+	void DashInput();
+	void DashEndInput();
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)

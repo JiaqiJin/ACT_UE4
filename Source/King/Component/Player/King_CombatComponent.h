@@ -31,6 +31,8 @@ public:
 
 	void RegisterCombatAttack(FSimpleCombatCheck& InCombatCheck, const FName& InKey);
 
+	bool GetIsAbilityCanceled() { return bCancelActivateAbility; }
+	void SetIsAbilityCanceled(bool Value) { bCancelActivateAbility = Value; }
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -39,4 +41,6 @@ protected:
 	TWeakObjectPtr<AKingCharacter> Character;
 	UPROPERTY()
 	TWeakObjectPtr<UKing_AbilitySystemComponent> AbilitySystemComponent;
+
+	bool bCancelActivateAbility = false;
 };

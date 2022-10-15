@@ -108,6 +108,24 @@ UKing_CharacterMovementComponent* AKingCharacter::GetPlayerCharacterMovementComp
 	return nullptr;
 }
 
+UKing_CombatComponent* AKingCharacter::GetCombatComponent() const
+{
+	if (CombatComponent)
+	{
+		return CombatComponent;
+	}
+	return nullptr;
+}
+
+UKing_PlayerAbilityComponent* AKingCharacter::GetPlayerAbilityComponent() const
+{
+	if (PlayerAbilityComponent)
+	{
+		return PlayerAbilityComponent;
+	}
+	return nullptr;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -125,6 +143,10 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("MouseLeftClickReleased", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
 	PlayerInputComponent->BindAction("HeavyAttack", IE_Pressed, this, &AKingCharacter::MouseRightClick);
 	PlayerInputComponent->BindAction("HeavyAttack", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
+
+	// Dash
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &AKingCharacter::DashInput);
+	PlayerInputComponent->BindAction("Dash", IE_Released, this, &AKingCharacter::DashEndInput);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -184,7 +206,7 @@ void AKingCharacter::MouseLeftClick()
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MouseLeftClick"));
 	
 	GetSimpleCombatInfo()->Press();
-
+	CombatComponent->SetIsAbilityCanceled(true);
 	FGameplayTagContainer TagContainer;
 	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.LightAttack")));
 	
@@ -203,9 +225,28 @@ void AKingCharacter::MouseLeftClickReleased()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MouseLeftClickReleased"));
 	GetSimpleCombatInfo()->Released();
+	CombatComponent->SetIsAbilityCanceled(false);
 }
 
 void AKingCharacter::MouseRightClickReleased()
 {
+
+}
+
+void AKingCharacter::DashInput()
+{
+	CombatComponent->SetIsAbilityCanceled(true);
+	FGameplayTagContainer TagContainer;
+	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.Dash")));
+
+	if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
+	{
+		return;
+	}
+}
+
+void AKingCharacter::DashEndInput()
+{
+	CombatComponent->SetIsAbilityCanceled(false);
 
 }

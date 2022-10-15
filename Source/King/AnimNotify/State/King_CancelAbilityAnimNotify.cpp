@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "GAS/King_AbilitySystemComponent.h"
 #include "GameplayTagContainer.h"
+#include "Component/Player/King_CombatComponent.h"
 
 void UKing_CancelAbilityAnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
@@ -14,12 +15,16 @@ void UKing_CancelAbilityAnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp
 	FGameplayTagContainer CancelAbilityTag;
 	if (PlayerCharacter)
 	{
-		UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
-		if (AbilitySystemComponent)
+		UKing_CombatComponent* CombatComponent = PlayerCharacter->GetCombatComponent();
+		if (CombatComponent && CombatComponent->GetIsAbilityCanceled())
 		{
-			CancelAbilityTag.AddTag(TagToCancelAbility);
+			UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
+			if (AbilitySystemComponent)
+			{
+				CancelAbilityTag.AddTag(TagToCancelAbility);
 
-			AbilitySystemComponent->CancelAbilities(&CancelAbilityTag);
+				AbilitySystemComponent->CancelAbilities(&CancelAbilityTag);
+			}
 		}
 	}
 }
@@ -29,14 +34,18 @@ void UKing_CancelAbilityAnimNotify::NotifyTick(USkeletalMeshComponent* MeshComp,
 	AKingCharacter* PlayerCharacter = Cast<AKingCharacter>(MeshComp->GetOwner());
 	if (PlayerCharacter)
 	{
-		UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
-		if (AbilitySystemComponent)
+		UKing_CombatComponent* CombatComponent = PlayerCharacter->GetCombatComponent();
+		if (CombatComponent && CombatComponent->GetIsAbilityCanceled())
 		{
-			FGameplayTagContainer CancelAbilityTag;
-			CancelAbilityTag.AddTag(TagToCancelAbility);
+			UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
+			if (AbilitySystemComponent)
+			{
+				FGameplayTagContainer CancelAbilityTag;
+				CancelAbilityTag.AddTag(TagToCancelAbility);
 
-			PlayerCharacter->CharacterCancelAbilities(CancelAbilityTag);
-		}
+				PlayerCharacter->CharacterCancelAbilities(CancelAbilityTag);
+			}
+		}	
 	}
 }
 

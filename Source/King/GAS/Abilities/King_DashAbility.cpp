@@ -56,7 +56,7 @@ void UKing_DashAbility::ActivateAbility(
 
 	if (FMath::IsNearlyEqual(ForwardResult, 1.0f, 0.025f))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Up !!!!");
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Up !!!!");
 		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashForward, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
 		Task->OnBlendOut.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnCompleted.AddDynamic(this, &UKing_DashAbility::OnCompleted);
@@ -68,8 +68,8 @@ void UKing_DashAbility::ActivateAbility(
 
 	else if (FMath::IsNearlyEqual(ForwardResult, -1.0f, 0.025f))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Down !!!!");
-		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashForward, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Down !!!!");
+		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashBackwards, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
 		Task->OnBlendOut.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnCompleted.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnInterrupted.AddDynamic(this, &UKing_DashAbility::OnCancelled);
@@ -80,8 +80,8 @@ void UKing_DashAbility::ActivateAbility(
 
 	else if (FMath::IsNearlyEqual(RightResult, 1.0f, 0.025f))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Left !!!!");
-		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashForward, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Left !!!!");
+		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashLeft, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
 		Task->OnBlendOut.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnCompleted.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnInterrupted.AddDynamic(this, &UKing_DashAbility::OnCancelled);
@@ -92,8 +92,8 @@ void UKing_DashAbility::ActivateAbility(
 
 	else if (FMath::IsNearlyEqual(RightResult, -1.0f, 0.025f))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Rigth !!!!");
-		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashForward, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Rigth !!!!");
+		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashRight, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
 		Task->OnBlendOut.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnCompleted.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnInterrupted.AddDynamic(this, &UKing_DashAbility::OnCancelled);
@@ -110,6 +110,9 @@ void UKing_DashAbility::EndAbility(
 	bool bReplicateEndAbility,
 	bool bWasCancelled)
 {
+	CharacterForwardVector = FVector(0.0f);
+	CharacterRightVector = FVector(0.0f);
+	VelocityVector = FVector(0.0f);
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
