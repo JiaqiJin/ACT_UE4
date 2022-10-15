@@ -55,7 +55,6 @@ void UKing_LightAttackAbility::EndAbility(const FGameplayAbilitySpecHandle Handl
 		bool bReplicateEndAbility,
 		bool bWasCancelled)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Im Canceled !!!!");
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 

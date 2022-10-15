@@ -16,14 +16,18 @@ void UKing_CancelAbilityAnimNotify::NotifyBegin(USkeletalMeshComponent* MeshComp
 	if (PlayerCharacter)
 	{
 		UKing_CombatComponent* CombatComponent = PlayerCharacter->GetCombatComponent();
-		if (CombatComponent && CombatComponent->GetIsAbilityCanceled())
+		if (CombatComponent)
 		{
-			UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
-			if (AbilitySystemComponent)
+			CombatComponent->SetIsInComboAttack(false);	
+			if (CombatComponent->GetIsAbilityCanceled())
 			{
-				CancelAbilityTag.AddTag(TagToCancelAbility);
+				UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
+				if (AbilitySystemComponent)
+				{
+					CancelAbilityTag.AddTag(TagToCancelAbility);
 
-				AbilitySystemComponent->CancelAbilities(&CancelAbilityTag);
+					AbilitySystemComponent->CancelAbilities(&CancelAbilityTag);
+				}
 			}
 		}
 	}
@@ -35,15 +39,19 @@ void UKing_CancelAbilityAnimNotify::NotifyTick(USkeletalMeshComponent* MeshComp,
 	if (PlayerCharacter)
 	{
 		UKing_CombatComponent* CombatComponent = PlayerCharacter->GetCombatComponent();
-		if (CombatComponent && CombatComponent->GetIsAbilityCanceled())
+		if (CombatComponent)
 		{
-			UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
-			if (AbilitySystemComponent)
+			CombatComponent->SetIsInComboAttack(false);
+			if (CombatComponent->GetIsAbilityCanceled())
 			{
-				FGameplayTagContainer CancelAbilityTag;
-				CancelAbilityTag.AddTag(TagToCancelAbility);
+				UKing_AbilitySystemComponent* AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PlayerCharacter->GetAbilitySystemComponent());
+				if (AbilitySystemComponent)
+				{
+					FGameplayTagContainer CancelAbilityTag;
+					CancelAbilityTag.AddTag(TagToCancelAbility);
 
-				PlayerCharacter->CharacterCancelAbilities(CancelAbilityTag);
+					PlayerCharacter->CharacterCancelAbilities(CancelAbilityTag);
+				}
 			}
 		}	
 	}

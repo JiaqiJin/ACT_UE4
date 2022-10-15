@@ -33,6 +33,9 @@ public:
 
 	bool GetIsAbilityCanceled() { return bCancelActivateAbility; }
 	void SetIsAbilityCanceled(bool Value) { bCancelActivateAbility = Value; }
+
+	bool GetIsInComboAttack() { return bIsInComboAttack; }
+	void SetIsInComboAttack(bool Value) { bIsInComboAttack = Value; }
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -42,5 +45,9 @@ protected:
 	UPROPERTY()
 	TWeakObjectPtr<UKing_AbilitySystemComponent> AbilitySystemComponent;
 
+	// Cancel Ability
 	bool bCancelActivateAbility = false;
+
+	// Combat
+	bool bIsInComboAttack = false;
 };

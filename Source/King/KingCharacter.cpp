@@ -15,6 +15,7 @@
 #include "King_Types.h"
 #include "Component/Player/King_CharacterMovementComponent.h"
 #include "GAS/King_AttributeSet.h"
+#include "Character/King_PlayerState.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AKingCharacter
@@ -52,11 +53,8 @@ AKingCharacter::AKingCharacter(const class FObjectInitializer& InitializerObject
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Component
-	AbilitySystemComponent = CreateDefaultSubobject<UKing_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	PlayerAbilityComponent = CreateDefaultSubobject<UKing_PlayerAbilityComponent>(TEXT("PlayerAbilityComponent"));
 	CombatComponent = CreateDefaultSubobject<UKing_CombatComponent>(TEXT("CombatComponent"));
-
-	PlayerAttributes = CreateDefaultSubobject<UKing_AttributeSet>(TEXT("AttributeSet"));
 
 	UKing_CharacterMovementComponent* MovementComponent = Cast<UKing_CharacterMovementComponent>(GetCharacterMovement());
 	if (MovementComponent)
@@ -72,9 +70,18 @@ void AKingCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	InitializePassiveAttributes();
+	AKing_PlayerState* PS = GetPlayerState<AKing_PlayerState>();
+	if (PS)
+	{
+		AbilitySystemComponent = Cast<UKing_AbilitySystemComponent>(PS->GetAbilitySystemComponent());
+		AbilitySystemComponent->InitAbilityActorInfo(PS, this);
 
-	PlayerAbilityComponent->LoadAllGameplayAbilities();
+		PlayerAttributes = PS->GetAttributeSetBase();
+
+		InitializePassiveAttributes();
+
+		PlayerAbilityComponent->LoadAllGameplayAbilities();
+	}
 }
 
 void AKingCharacter::BeginPlay()
@@ -207,6 +214,7 @@ void AKingCharacter::MouseLeftClick()
 	
 	GetSimpleCombatInfo()->Press();
 	CombatComponent->SetIsAbilityCanceled(true);
+	CombatComponent->SetIsInComboAttack(true);
 	FGameplayTagContainer TagContainer;
 	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.LightAttack")));
 	
@@ -226,6 +234,7 @@ void AKingCharacter::MouseLeftClickReleased()
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MouseLeftClickReleased"));
 	GetSimpleCombatInfo()->Released();
 	CombatComponent->SetIsAbilityCanceled(false);
+	CombatComponent->SetIsInComboAttack(false);
 }
 
 void AKingCharacter::MouseRightClickReleased()
@@ -239,10 +248,15 @@ void AKingCharacter::DashInput()
 	FGameplayTagContainer TagContainer;
 	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.Dash")));
 
-	if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
+	// Check if is in combat
+	if(!CombatComponent->GetIsInComboAttack())
 	{
-		return;
+		if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
+		{
+			return;
+		}
 	}
+	
 }
 
 void AKingCharacter::DashEndInput()

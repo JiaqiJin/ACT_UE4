@@ -6,6 +6,7 @@
 #include "GAS/AbilityTasks/King_PlayMontageAndWaitEvent.h"
 #include "AbilitySystemComponent.h"
 #include "Character/King_CharacterBase.h"
+#include "Character/King_PlayerController.h"
 
 UKing_DashAbility::UKing_DashAbility()
 {
@@ -49,6 +50,10 @@ void UKing_DashAbility::ActivateAbility(
 		CharacterRightVector = Character->GetActorRightVector();
 		VelocityVector = Character->GetVelocity();
 		VelocityVector.Normalize(0.0001f);
+	}
+	else
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 	}
 
 	float ForwardResult = FVector::DotProduct(CharacterForwardVector, VelocityVector);
@@ -101,6 +106,12 @@ void UKing_DashAbility::ActivateAbility(
 		Task->EventReceived.AddDynamic(this, &UKing_DashAbility::EventReceived);
 		Task->ReadyForActivation();
 	}
+
+	/*AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
+	if (Controller)
+	{
+		Character->DisableInput(Controller);
+	}*/
 }
 
 void UKing_DashAbility::EndAbility(
@@ -110,9 +121,12 @@ void UKing_DashAbility::EndAbility(
 	bool bReplicateEndAbility,
 	bool bWasCancelled)
 {
-	CharacterForwardVector = FVector(0.0f);
-	CharacterRightVector = FVector(0.0f);
-	VelocityVector = FVector(0.0f);
+	/*AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
+	if (Controller)
+	{
+		Character->EnableInput(Controller);
+	}*/
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Im Canceled !!!!");
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
