@@ -22,9 +22,11 @@ namespace EKingAbilityInputID
 		Cancel			UMETA(DisplayName = "Cancel"),
 		// Dash
 		Dash			UMETA(DisplayName = "Dash"),
-		// Attack
-		Attack			UMETA(DisplayName = "Attack"),
+		// LightAttack
+		LightAttack		UMETA(DisplayName = "LightAttack"),
 		// HeavyAttack
-		HeavyAttack		UMETA(DisplayName = "HeavyAttack")
+		HeavyAttack		UMETA(DisplayName = "HeavyAttack"),
+		// Jump
+		Jump			UMETA(DisplayName = "Jump")
 	};
 }

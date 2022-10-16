@@ -140,14 +140,14 @@ void AKingCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	/*PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);*/
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AKingCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AKingCharacter::MoveRight);
 
-	PlayerInputComponent->BindAction("MouseLeftClick", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
-	PlayerInputComponent->BindAction("MouseLeftClickReleased", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
+	PlayerInputComponent->BindAction("LightAttack", IE_Pressed, this, &AKingCharacter::MouseLeftClick);
+	PlayerInputComponent->BindAction("LightAttack", IE_Released, this, &AKingCharacter::MouseLeftClickReleased);
 	PlayerInputComponent->BindAction("HeavyAttack", IE_Pressed, this, &AKingCharacter::MouseRightClick);
 	PlayerInputComponent->BindAction("HeavyAttack", IE_Released, this, &AKingCharacter::MouseRightClickReleased);
 
@@ -215,13 +215,6 @@ void AKingCharacter::MouseLeftClick()
 	GetSimpleCombatInfo()->Press();
 	CombatComponent->SetIsAbilityCanceled(true);
 	CombatComponent->SetIsInComboAttack(true);
-	FGameplayTagContainer TagContainer;
-	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.LightAttack")));
-	
-	/*if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
-	{
-		return;
-	}*/
 }
 
 void AKingCharacter::MouseRightClick()
@@ -243,19 +236,8 @@ void AKingCharacter::MouseRightClickReleased()
 
 void AKingCharacter::DashInput()
 {
-	CombatComponent->SetIsAbilityCanceled(true);
-	FGameplayTagContainer TagContainer;
-	TagContainer = (FGameplayTagContainer(FGameplayTag::RequestGameplayTag("Ability.Dash")));
-
+	//CombatComponent->SetIsAbilityCanceled(true);
 	// Check if is in combat
-	if(!CombatComponent->GetIsInComboAttack())
-	{
-		/*if (!AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer))
-		{
-			return;
-		}*/
-	}
-	
 }
 
 void AKingCharacter::DashEndInput()

@@ -23,7 +23,7 @@ void UKing_DashAbility::ActivateAbility(
 	if (!IsValid(AnimMontageDashForward) || !IsValid(AnimMontageDashBackwards) || !IsValid(AnimMontageDashRight) || !IsValid(AnimMontageDashLeft))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("[%s] UKing_DashAbility: Cannot get Animation Montage ... "), *GetName());
-		Super::EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
 		return;
 	}
 
@@ -31,14 +31,14 @@ void UKing_DashAbility::ActivateAbility(
 	if (!Character)
 	{
 		UE_LOG(LogTemp, Display, TEXT("[%s] UKing_DashAbility: Cannot Cast ASATORICharacter ... "), *GetName());
-		Super::EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
 		return;
 	}
 
 	if (!CommitAbility(Handle, ActorInfo, ActivationInfo))
 	{
 		UE_LOG(LogTemp, Display, TEXT("[%s] UKing_DashAbility: Failed commit ability ... "), *GetName());
-		Super::EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
 		return;
 	}
 
@@ -58,6 +58,13 @@ void UKing_DashAbility::ActivateAbility(
 
 	float ForwardResult = FVector::DotProduct(CharacterForwardVector, VelocityVector);
 	float RightResult = FVector::DotProduct(CharacterRightVector, VelocityVector);
+
+	// Disable Input
+	AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
+	if (Controller)
+	{
+		Character->DisableInput(Controller);
+	}
 
 	if (FMath::IsNearlyEqual(ForwardResult, 1.0f, 0.025f))
 	{
@@ -106,12 +113,6 @@ void UKing_DashAbility::ActivateAbility(
 		Task->EventReceived.AddDynamic(this, &UKing_DashAbility::EventReceived);
 		Task->ReadyForActivation();
 	}
-
-	/*AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
-	if (Controller)
-	{
-		Character->DisableInput(Controller);
-	}*/
 }
 
 void UKing_DashAbility::EndAbility(
@@ -121,12 +122,11 @@ void UKing_DashAbility::EndAbility(
 	bool bReplicateEndAbility,
 	bool bWasCancelled)
 {
-	/*AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
+	AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
 	if (Controller)
 	{
 		Character->EnableInput(Controller);
-	}*/
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Im Canceled !!!!");
+	}
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
