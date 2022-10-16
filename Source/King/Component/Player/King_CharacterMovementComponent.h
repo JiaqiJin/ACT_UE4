@@ -15,13 +15,13 @@ class KING_API UKing_CharacterMovementComponent : public UCharacterMovementCompo
 public:
 	UKing_CharacterMovementComponent();
 
-	//virtual float GetMaxSpeed() const override;
+	virtual float GetMaxSpeed() const override;
 
-	//virtual float GetMaxJumpHeight() const;
+	virtual float GetMaxJumpHeight() const;
 
-	//virtual float GetMaxJumpHeightWithJumpTime() const;
+	virtual float GetMaxJumpHeightWithJumpTime() const;
 
-	//void SetJumpZVelocity(float NewValue);
+	void SetJumpZVelocity(float NewValue);
 
 	UFUNCTION(BlueprintCallable, Category = "Hero|Component|MovementComponent")
 	void SetSprinting(bool bNewSprint) { isSprinting = bNewSprint; }

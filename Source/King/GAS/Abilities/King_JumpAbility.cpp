@@ -38,7 +38,8 @@ bool UKing_JumpAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Hand
 	{
 		return false;
 	}
-	return true;
+	const ACharacter* Character = CastChecked<ACharacter>(ActorInfo->AvatarActor.Get(), ECastCheckedType::NullAllowed);
+	return Character && Character->CanJump();
 }
 
 void UKing_JumpAbility::InputReleased(const FGameplayAbilitySpecHandle Handle,

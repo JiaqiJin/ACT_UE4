@@ -236,7 +236,7 @@ void AKingCharacter::MouseRightClickReleased()
 
 void AKingCharacter::DashInput()
 {
-	//CombatComponent->SetIsAbilityCanceled(true);
+	CombatComponent->SetIsAbilityCanceled(true);
 	// Check if is in combat
 }
 

@@ -60,11 +60,11 @@ void UKing_DashAbility::ActivateAbility(
 	float RightResult = FVector::DotProduct(CharacterRightVector, VelocityVector);
 
 	// Disable Input
-	AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
+	/*AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
 	if (Controller)
 	{
 		Character->DisableInput(Controller);
-	}
+	}*/
 
 	if (FMath::IsNearlyEqual(ForwardResult, 1.0f, 0.025f))
 	{
@@ -122,11 +122,11 @@ void UKing_DashAbility::EndAbility(
 	bool bReplicateEndAbility,
 	bool bWasCancelled)
 {
-	AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
+	/*AKing_PlayerController* Controller = Cast<AKing_PlayerController>(Character->GetController());
 	if (Controller)
 	{
 		Character->EnableInput(Controller);
-	}
+	}*/
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -143,4 +143,22 @@ void UKing_DashAbility::OnCompleted(FGameplayTag EventTag, FGameplayEventData Ev
 void UKing_DashAbility::EventReceived(FGameplayTag EventTag, FGameplayEventData EventData)
 {
 	
+}
+
+void UKing_DashAbility::InputReleased(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo)
+{
+	if (ActorInfo != NULL && ActorInfo->AvatarActor != NULL)
+	{
+		CancelAbility(Handle, ActorInfo, ActivationInfo, true);
+	}
+}
+
+void UKing_DashAbility::CancelAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo,
+	bool bReplicateCancelAbility)
+{
+	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
 }
