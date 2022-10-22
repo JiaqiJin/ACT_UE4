@@ -33,6 +33,11 @@ public:
 		bool bReplicateEndAbility,
 		bool bWasCancelled) override;
 
+	virtual void CancelAbility(const FGameplayAbilitySpecHandle Handle,
+		const FGameplayAbilityActorInfo* ActorInfo, 
+		const FGameplayAbilityActivationInfo ActivationInfo,
+		bool bReplicateCancelAbility);
+
 protected:
 	bool bStopWhenAbilityEnds = true;
 	bool bIsCreateOnRunning = false;

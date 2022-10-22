@@ -6,6 +6,7 @@
 #include "GAS/AbilityTasks/King_PlayMontageAndWaitEvent.h"
 #include "AbilitySystemComponent.h"
 #include "Character/King_CharacterBase.h"
+#include "GAS/King_AbilitySystemComponent.h"
 
 UKing_LightAttackAbility::UKing_LightAttackAbility()
 {
@@ -71,4 +72,32 @@ void UKing_LightAttackAbility::OnCompleted(FGameplayTag EventTag, FGameplayEvent
 void UKing_LightAttackAbility::EventReceived(FGameplayTag EventTag, FGameplayEventData EventData)
 {
 
+}
+
+void UKing_LightAttackAbility::CancelAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, 
+	const FGameplayAbilityActivationInfo ActivationInfo, 
+	bool bReplicateCancelAbility)
+{
+	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	if (AnimInstance && LigthAttackAnimMontage)
+	{
+		FAnimMontageInstance* MontageInstance = AnimInstance->GetActiveInstanceForMontage(LigthAttackAnimMontage);
+		if (MontageInstance)
+		{
+			MontageInstance->OnMontageBlendingOutStarted.Unbind();
+			MontageInstance->OnMontageEnded.Unbind();
+		}
+	}
+	if (Character)
+	{
+		UKing_AbilitySystemComponent* AbilitySystemComponent =
+			Cast<UKing_AbilitySystemComponent>(Character->GetAbilitySystemComponent());
+		if (AbilitySystemComponent)
+		{
+			AbilitySystemComponent->CurrentMontageStop();
+		}
+	}
+
+	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
 }
