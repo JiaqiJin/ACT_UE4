@@ -7,6 +7,7 @@
 #include "King_DashAbility.generated.h"
 
 class AKing_CharacterBase;
+class AKingCharacter;
 
 UCLASS()
 class KING_API UKing_DashAbility : public UKing_GameplayAbility
@@ -51,13 +52,15 @@ public:
 		const FGameplayAbilityActivationInfo ActivationInfo,
 		bool bReplicateCancelAbility) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayTag")
+	FGameplayTag EventAbilityTag;
 protected:
 
 	bool bIsCreateOnRunning = false;
 
 	bool bStopWhenAbilityEnds = true;
 
-	AKing_CharacterBase* Character;
+	AKingCharacter* Character = nullptr;
 
 	FCollisionQueryParams CollisionParams = FCollisionQueryParams(FName("LineTraceSingle"));
 

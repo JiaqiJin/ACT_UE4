@@ -7,6 +7,9 @@
 #include "AbilitySystemComponent.h"
 #include "Character/King_CharacterBase.h"
 #include "Character/King_PlayerController.h"
+#include "GameFramework/RootMotionSource.h"
+#include "GameFramework/Character.h"
+#include "Component/Player/King_CharacterMovementComponent.h"
 
 UKing_DashAbility::UKing_DashAbility()
 {
@@ -27,7 +30,7 @@ void UKing_DashAbility::ActivateAbility(
 		return;
 	}
 
-	Character = Cast<AKing_CharacterBase>(GetAvatarActorFromActorInfo());
+	Character = Cast<AKingCharacter>(GetAvatarActorFromActorInfo());
 	if (!Character)
 	{
 		UE_LOG(LogTemp, Display, TEXT("[%s] UKing_DashAbility: Cannot Cast ASATORICharacter ... "), *GetName());
@@ -69,6 +72,9 @@ void UKing_DashAbility::ActivateAbility(
 	if (FMath::IsNearlyEqual(ForwardResult, 1.0f, 0.025f))
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Up !!!!");
+		const FVector ForwardDir = Character->GetActorRotation().Vector();
+		Character->LaunchCharacter(ForwardDir * 10000.0f * 1.0f, true, true);
+
 		UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, AnimMontageDashForward, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
 		Task->OnBlendOut.AddDynamic(this, &UKing_DashAbility::OnCompleted);
 		Task->OnCompleted.AddDynamic(this, &UKing_DashAbility::OnCompleted);
@@ -142,7 +148,16 @@ void UKing_DashAbility::OnCompleted(FGameplayTag EventTag, FGameplayEventData Ev
 
 void UKing_DashAbility::EventReceived(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	
+	/*FRootMotionSource_MoveToDynamicForce* MoveToForce = new FRootMotionSource_MoveToDynamicForce();
+	UKing_CharacterMovementComponent* CharacterMovement = Character->GetPlayerCharacterMovementComponent();
+	if (CharacterMovement)
+	{
+		CharacterMovement->ApplyRootMotionSource(MoveToForce);
+	}*/
+	if (EventTag == EventAbilityTag)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, "Reveiced Event !!!!");
+	}
 }
 
 void UKing_DashAbility::InputReleased(const FGameplayAbilitySpecHandle Handle,

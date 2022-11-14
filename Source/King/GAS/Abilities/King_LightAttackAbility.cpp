@@ -79,6 +79,16 @@ void UKing_LightAttackAbility::CancelAbility(const FGameplayAbilitySpecHandle Ha
 	const FGameplayAbilityActivationInfo ActivationInfo, 
 	bool bReplicateCancelAbility)
 {
+	if (Character)
+	{
+		UKing_AbilitySystemComponent* AbilitySystemComponent =
+			Cast<UKing_AbilitySystemComponent>(Character->GetAbilitySystemComponent());
+		if (AbilitySystemComponent)
+		{
+			AbilitySystemComponent->CurrentMontageStop();
+		}
+	}
+
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 	if (AnimInstance && LigthAttackAnimMontage)
 	{
@@ -87,15 +97,9 @@ void UKing_LightAttackAbility::CancelAbility(const FGameplayAbilitySpecHandle Ha
 		{
 			MontageInstance->OnMontageBlendingOutStarted.Unbind();
 			MontageInstance->OnMontageEnded.Unbind();
-		}
-	}
-	if (Character)
-	{
-		UKing_AbilitySystemComponent* AbilitySystemComponent =
-			Cast<UKing_AbilitySystemComponent>(Character->GetAbilitySystemComponent());
-		if (AbilitySystemComponent)
-		{
-			AbilitySystemComponent->CurrentMontageStop();
+
+			FAlphaBlend* AlfaBlend = nullptr;
+			MontageInstance->Stop(*AlfaBlend);
 		}
 	}
 
