@@ -18,6 +18,7 @@ UCLASS(config=Game)
 class AKingCharacter : public AKing_CharacterBase, public IKing_CombatInterface
 {
 	GENERATED_BODY()
+
 public:
 	AKingCharacter(const class FObjectInitializer& InitializerObject);
 
@@ -30,6 +31,7 @@ public:
 	UKing_CharacterMovementComponent* GetPlayerCharacterMovementComponent() const;
 	UKing_CombatComponent* GetCombatComponent() const;
 	UKing_PlayerAbilityComponent* GetPlayerAbilityComponent() const;
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -55,6 +57,29 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+public:
+	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float BaseTurnRate;
+
+	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float BaseLookUpRate;
+
+	// Cameras Parameters
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	bool IsRightShoulder = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float ThirdPerson_FOV = 90.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float FirstdPerson_FOV = 90.0f;
+
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	/** Returns FollowCamera subobject **/
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 protected:
 	/** Called for forwards/backward input */
@@ -81,18 +106,5 @@ protected:
 	void MouseRightClickReleased();
 	void DashInput();
 	void DashEndInput();
-public:
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-	float BaseLookUpRate;
-
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
 
