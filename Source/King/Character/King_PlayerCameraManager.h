@@ -18,4 +18,16 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	USkeletalMeshComponent* CameraBehavior = nullptr;
+
+	UFUNCTION(BlueprintCallable)
+	void OnPossess(APawn* aPawn);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void UpdateCameraAnimBehaviorBP();
+
+	// Getters
+	UFUNCTION(BlueprintPure)
+	APawn* GetCameraControlledPawn();
+protected:
+	APawn* ControlledPawn;
 };
