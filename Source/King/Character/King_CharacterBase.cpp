@@ -51,7 +51,6 @@ void AKing_CharacterBase::InitializePassiveAttributes()
 
 void AKing_CharacterBase::ApplyGameplayeEffectToPlayerWithParam(TSubclassOf<UGameplayEffect> GameplayEffect)
 {
-	
 	FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, GetCurrentLevel(), EffectContext);
 	if (NewHandle.IsValid())
 	{

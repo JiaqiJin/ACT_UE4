@@ -22,6 +22,7 @@ class AKingCharacter : public AKing_CharacterBase, public IKing_CombatInterface
 public:
 	AKingCharacter(const class FObjectInitializer& InitializerObject);
 
+	// Combat Functions
 	void NormalAttack(const FName& InKey);
 	virtual void CombatAttack(const FName& InKey);
 	virtual FSimpleCombatCheck* GetSimpleCombatInfo();
