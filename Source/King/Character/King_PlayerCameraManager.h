@@ -33,10 +33,10 @@ public:
 public:
 	// Cameras Property
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FTransform* PivotTarget = nullptr;
+	FTransform PivotTarget;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FVector* FPTarget = nullptr;
+	FVector FPTarget;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float TP_FOV = 0.0f;
