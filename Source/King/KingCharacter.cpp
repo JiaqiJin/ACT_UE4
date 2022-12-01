@@ -115,6 +115,11 @@ UKing_CharacterMovementComponent* AKingCharacter::GetPlayerCharacterMovementComp
 	return nullptr;
 }
 
+bool AKingCharacter::IsEnemyInFront()
+{
+	return CombatComponent->IsEnemyInFront();
+}
+
 UKing_CombatComponent* AKingCharacter::GetCombatComponent() const
 {
 	if (CombatComponent)

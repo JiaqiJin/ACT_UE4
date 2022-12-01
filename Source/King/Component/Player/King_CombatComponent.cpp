@@ -5,6 +5,8 @@
 #include "GAS/King_AbilitySystemComponent.h"
 #include "GAS/King_GameplayAbility.h"
 #include "KingCharacter.h"
+#include "DrawDebugHelpers.h"
+#include "AI/AI_CharacterBase.h"
 
 // Sets default values for this component's properties
 UKing_CombatComponent::UKing_CombatComponent()
@@ -37,4 +39,62 @@ void UKing_CombatComponent::RegisterCombatAttack(FSimpleCombatCheck& InCombatChe
 	InCombatCheck.Character = Character.Get();
 	InCombatCheck.CombatKey = InKey;
 	InCombatCheck.MaxIndex = 4;
+}
+
+bool UKing_CombatComponent::IsEnemyInFront()
+{
+	// Player Position
+	const FVector StartPosition = Character->GetActorLocation();
+	const FRotator StartRotation = Character->GetActorRotation();
+	const FVector EndPosition = StartPosition + (StartRotation.Vector() * MaxCheckEnemyDistance);
+
+	// Hit result parameters
+	UWorld* World = GetWorld();
+	FHitResult HitResult;
+	FCollisionQueryParams Params = FCollisionQueryParams(FName("LineTraceSingle"));
+	Params.AddIgnoredActor(Character->GetRootComponent()->GetOwner());
+
+	FVector Delta = EndPosition - StartPosition;
+
+	TWeakObjectPtr<AActor> NewActor;
+
+	bool bHit = false;
+
+	for (int i = -5; i <= 5; i++)
+	{
+		FVector Axis = FVector::ZAxisVector; // (0.0f, 0.0f, 1.0f)
+		float Rad = FMath::DegreesToRadians(i * VisibleAttackAngle); // Loop for each degrees and converto to radian
+		FQuat Local_Quaternion = FQuat(Axis, Rad);	// create a new quaternion and assign a new value for each rotation
+		FRotator rotator = FRotator(Local_Quaternion);
+		FVector NewDelta = rotator.RotateVector(Delta);
+
+		// Final position of each point
+		FVector New_EndPos = NewDelta + StartPosition;
+
+		bHit = GetWorld()->LineTraceSingleByChannel(
+			HitResult,
+			StartPosition,
+			New_EndPos,
+			ECollisionChannel::ECC_Pawn,
+			Params
+		);
+
+		::DrawDebugLine(World, StartPosition, New_EndPos, bHit ? FColor::Green : FColor::Red, false, 1.0f);
+
+		if (bHit)
+		{
+			NewActor = HitResult.Actor;
+			break;
+		}
+	}
+
+	// Check Enemy
+	AAI_CharacterBase* AICharacter = Cast<AAI_CharacterBase>(NewActor);
+	if (AICharacter)
+	{
+		// TODO 
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"));
+	}
+
+	return bHit;
 }

@@ -20,22 +20,35 @@ public:
 	// Sets default values for this component's properties
 	UKing_CombatComponent();
 
-	FSimpleCombatCheck CombatAttack;
-
 	void NormalAttack(const FName& InKey);
 
-	FSimpleCombatCheck* GetSimpleCombatInfo() { return &CombatAttack; }
+	// Check if enemy is in front of the player
+	UFUNCTION()
+	bool IsEnemyInFront();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UKing_GameplayAbility> LightAttack;
-
+	UFUNCTION()
 	void RegisterCombatAttack(FSimpleCombatCheck& InCombatCheck, const FName& InKey);
+
+	// Getters And Seeters
+	FSimpleCombatCheck* GetSimpleCombatInfo() { return &CombatAttack; }
 
 	bool GetIsAbilityCanceled() { return bCancelActivateAbility; }
 	void SetIsAbilityCanceled(bool Value) { bCancelActivateAbility = Value; }
 
 	bool GetIsInComboAttack() { return bIsInComboAttack; }
 	void SetIsInComboAttack(bool Value) { bIsInComboAttack = Value; }
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UKing_GameplayAbility> LightAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float MaxCheckEnemyDistance = 300.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Attack Setting")
+	float VisibleAttackAngle = 8.0f;
+
+	FSimpleCombatCheck CombatAttack;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

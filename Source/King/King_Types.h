@@ -25,7 +25,7 @@ struct KING_API FSimpleCombatCheck
 	class IKing_CombatInterface* Character; //CombatInterface
 
 	UPROPERTY()
-	int32 MaxIndex; //Max Combat number
+	int32 MaxIndex = 0; //Max Combat number
 
 	UPROPERTY()
 	FName CombatKey; // Combat Name

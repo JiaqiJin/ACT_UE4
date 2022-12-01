@@ -27,6 +27,9 @@ public:
 	virtual void CombatAttack(const FName& InKey);
 	virtual FSimpleCombatCheck* GetSimpleCombatInfo();
 
+	UFUNCTION(BlueprintCallable)
+	bool IsEnemyInFront();
+
 	// Getters
 	UFUNCTION(BlueprintPure, Category = "Player|Component|MovementComponent")
 	UKing_CharacterMovementComponent* GetPlayerCharacterMovementComponent() const;
