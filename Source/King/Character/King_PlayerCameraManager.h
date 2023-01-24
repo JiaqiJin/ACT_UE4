@@ -30,6 +30,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	APawn* GetCameraControlledPawn();
 
+	UFUNCTION(BlueprintPure)
+	float GetCameraBehaviorParam(FName CurveName);
 public:
 	// Cameras Property
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -43,6 +45,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float FP_FOV = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FRotator TargetCameraRotation;
 protected:
 	UPROPERTY()
 	APawn* ControlledPawn;

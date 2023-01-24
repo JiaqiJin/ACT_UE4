@@ -38,3 +38,18 @@ APawn* AKing_PlayerCameraManager::GetCameraControlledPawn()
 
 	return nullptr;
 }
+
+float AKing_PlayerCameraManager::GetCameraBehaviorParam(FName CurveName)
+{
+	if (CameraBehavior)
+	{
+		UAnimInstance* CameraAnimInstance = CameraBehavior->GetAnimInstance();
+		if (CameraAnimInstance)
+		{
+			float CurveValue = CameraAnimInstance->GetCurveValue(CurveName);
+			return CurveValue;
+		}
+	}
+
+	return 0.0f;
+}
