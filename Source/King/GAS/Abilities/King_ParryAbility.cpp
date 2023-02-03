@@ -42,6 +42,18 @@ void UKing_ParryAbility::ActivateAbility(
 		return;
 	}
 
+	if (Character->IsEnemyInFront())
+	{
+		UE_LOG(LogTemp, Display, TEXT(" Enemy in front of the player"));
+	}
+
+	UKing_PlayMontageAndWaitEvent* Task = UKing_PlayMontageAndWaitEvent::PlayMontageAndWaitForEvent(this, NAME_None, ParryAnimMontage, FGameplayTagContainer(), 1.0f, NAME_None, bStopWhenAbilityEnds, 1.0f);
+	Task->OnBlendOut.AddDynamic(this, &UKing_ParryAbility::OnCompleted);
+	Task->OnCompleted.AddDynamic(this, &UKing_ParryAbility::OnCompleted);
+	Task->OnInterrupted.AddDynamic(this, &UKing_ParryAbility::OnCancelled);
+	Task->OnCancelled.AddDynamic(this, &UKing_ParryAbility::OnCancelled);
+	Task->EventReceived.AddDynamic(this, &UKing_ParryAbility::EventReceived);
+	Task->ReadyForActivation();
 }
 
 void UKing_ParryAbility::EndAbility(
@@ -59,7 +71,7 @@ void UKing_ParryAbility::CancelAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActivationInfo ActivationInfo,
 	bool bReplicateCancelAbility)
 {
-
+	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
 }
 
 void UKing_ParryAbility::OnCancelled(FGameplayTag EventTag, FGameplayEventData EventData)

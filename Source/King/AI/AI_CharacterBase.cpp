@@ -8,6 +8,9 @@
 #include "GameFramework/Controller.h"
 #include "AIController.h"
 #include "Datas/GameplayAbilityDatas/King_GameplayAbilityDatas.h"
+#include "Kismet/GameplayStatics.h"
+#include "KingCharacter.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AAI_CharacterBase::AAI_CharacterBase(const class FObjectInitializer& InitializerObject)
@@ -15,6 +18,9 @@ AAI_CharacterBase::AAI_CharacterBase(const class FObjectInitializer& Initializer
 {
 	PlayerAttributes = CreateDefaultSubobject<UKing_AttributeSet>(TEXT("AttributeSetBase"));
 	AbilitySystemComponent = CreateDefaultSubobject<UKing_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+
+	// Just For the test
+	EnemyState = King_EnemyState::Attack;
 }
 
 // Called when the game starts or when spawned
@@ -83,4 +89,27 @@ void AAI_CharacterBase::GrantAICharacterAbilities()
 
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability.Ability, 1, static_cast<uint32>(Ability.AbilityKeys), this));
 	}
+}
+
+bool AAI_CharacterBase::IsPlayerInFront()
+{
+	AKingCharacter* PlayerCharacter = Cast<AKingCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (PlayerCharacter)
+	{
+		FVector AI_Location = GetActorLocation();
+		FVector Player_Location = PlayerCharacter->GetActorLocation();
+
+		FRotator EnemyRotation = UKismetMathLibrary::FindLookAtRotation(AI_Location, Player_Location);
+		FVector NewRot = UKismetMathLibrary::Conv_RotatorToVector(EnemyRotation);
+		FVector DotNewRotVector = FVector(NewRot.X, 0.0, 0.0);
+
+		float DotProduct = FVector::DotProduct(DotNewRotVector, PlayerCharacter->GetActorForwardVector());
+		float FinalDecACos = UKismetMathLibrary::DegAcos(DotProduct);
+		if (FinalDecACos < 90.0)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

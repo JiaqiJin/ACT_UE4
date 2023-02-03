@@ -27,6 +27,8 @@ namespace EKingAbilityInputID
 		// HeavyAttack
 		HeavyAttack		UMETA(DisplayName = "HeavyAttack"),
 		// Jump
-		Jump			UMETA(DisplayName = "Jump")
+		Jump			UMETA(DisplayName = "Jump"),
+		// Parry
+		Parry			UMETA(DisplayName = "Parry")
 	};
 }

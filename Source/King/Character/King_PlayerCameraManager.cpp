@@ -8,6 +8,8 @@ AKing_PlayerCameraManager::AKing_PlayerCameraManager()
 {
 	CameraBehavior = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CameraBehavior"));
 	CameraBehavior->SetupAttachment(GetTransformComponent());
+
+	DebugViewRotation = FRotator(0, -5.0f, 180.f);
 }
 
 void AKing_PlayerCameraManager::OnPossess(APawn* aPawn)

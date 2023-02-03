@@ -48,6 +48,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FRotator TargetCameraRotation;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FRotator DebugViewRotation;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FTransform SmoothTargetPivot;
 protected:
 	UPROPERTY()
 	APawn* ControlledPawn;

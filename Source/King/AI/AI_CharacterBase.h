@@ -23,6 +23,16 @@ enum class King_EnemyType : uint8
 	Boss UMETA(DisplayName = "Boss"),
 };
 
+UENUM(BlueprintType)
+enum class King_EnemyState : uint8
+{
+	None UMETA(DisplayName = "None"),
+	InPlace UMETA(DisplayName = "InPlace"),
+	Patrol UMETA(DisplayName = "Patrol"),
+	Attack UMETA(DisplayName = "Attack"),
+	Raged UMETA(DisplayName = "Raged"),
+};
+
 UCLASS()
 class KING_API AAI_CharacterBase : public AKing_CharacterBase
 {
@@ -34,8 +44,12 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 
+	// https://forums.unrealengine.com/t/how-to-tell-if-something-is-in-front-of-the-player-and-if-so-by-how-much/487541
+	UFUNCTION()
+	bool IsPlayerInFront();
 	// Getters
 	King_EnemyType GetEnemyType() { return EnemyType; }
+	King_EnemyState GetEnemyState() { return EnemyState; }
 
 public:
 	// Default attributes for a character for initializing on spawn/respawn.
@@ -65,4 +79,8 @@ protected:
 	// Enemy Type
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	King_EnemyType EnemyType;
+
+	// Enemy State
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	King_EnemyState EnemyState;
 };
