@@ -93,10 +93,12 @@ void AAI_CharacterBase::GrantAICharacterAbilities()
 
 bool AAI_CharacterBase::IsPlayerInFront()
 {
+	bool Result = false;
+
 	AKingCharacter* PlayerCharacter = Cast<AKingCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (PlayerCharacter)
 	{
-		FVector AI_Location = GetActorLocation();
+		/*FVector AI_Location = GetActorLocation();
 		FVector Player_Location = PlayerCharacter->GetActorLocation();
 
 		FRotator EnemyRotation = UKismetMathLibrary::FindLookAtRotation(AI_Location, Player_Location);
@@ -108,8 +110,23 @@ bool AAI_CharacterBase::IsPlayerInFront()
 		if (FinalDecACos < 90.0)
 		{
 			return true;
+		}*/
+
+		//角度
+		float AngleDegrees = 90.0f;
+		//Actor位置指向目标位置的向量
+		const FVector ActorToTarget = PlayerCharacter->GetTargetLocation() - GetActorLocation();
+		//cos的弧度
+		float CosRadians = FMath::Cos(FMath::Clamp(FMath::DegreesToRadians(AngleDegrees), 0.f, PI));
+		//归一化后的方向向量点乘得到Cos（角度/弧度）
+		if (FVector::DotProduct(ActorToTarget.GetUnsafeNormal(), GetActorForwardVector()) > CosRadians)
+		{
+			Result = true;
+		}
+		else {
+			Result = false;
 		}
 	}
 
-	return false;
+	return Result;
 }

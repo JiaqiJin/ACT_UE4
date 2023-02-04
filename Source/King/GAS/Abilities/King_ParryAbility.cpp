@@ -7,6 +7,8 @@
 #include "AbilitySystemComponent.h"
 #include "Character/King_CharacterBase.h"
 #include "GAS/King_AbilitySystemComponent.h"
+#include "Component/Player/King_CombatComponent.h"
+#include "AI/AI_CharacterBase.h"
 
 UKing_ParryAbility::UKing_ParryAbility()
 {
@@ -88,7 +90,15 @@ void UKing_ParryAbility::EventReceived(FGameplayTag EventTag, FGameplayEventData
 {
 	if (EventTag == EventAbilityTag)
 	{
-		// TODO
 		// Check enemy attack and check if we can parry
+		UKing_CombatComponent* CombatCompnent = Character->GetCombatComponent();
+		if (CombatCompnent)
+		{
+			AAI_CharacterBase* AICharacter = CombatCompnent->GetInFrontAICharacter();
+			if (AICharacter && AICharacter->IsPlayerInFront())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Enemy In front with parry hability"));
+			}
+		}
 	}
 }

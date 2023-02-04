@@ -43,6 +43,22 @@ void UKing_CombatComponent::RegisterCombatAttack(FSimpleCombatCheck& InCombatChe
 
 bool UKing_CombatComponent::IsEnemyInFront()
 {
+	// Check Enemy
+	AAI_CharacterBase* AICharacter = GetInFrontAICharacter();
+	if (AICharacter)
+	{
+		// TODO 
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"));
+		return true;
+	}
+
+	return false;
+}
+
+AAI_CharacterBase* UKing_CombatComponent::GetInFrontAICharacter()
+{
+	AAI_CharacterBase* AICharacter;
+
 	// Player Position
 	const FVector StartPosition = Character->GetActorLocation();
 	const FRotator StartRotation = Character->GetActorRotation();
@@ -84,17 +100,11 @@ bool UKing_CombatComponent::IsEnemyInFront()
 		if (bHit)
 		{
 			NewActor = HitResult.Actor;
+			AICharacter = Cast<AAI_CharacterBase>(NewActor);
+			return AICharacter;
 			break;
 		}
 	}
 
-	// Check Enemy
-	AAI_CharacterBase* AICharacter = Cast<AAI_CharacterBase>(NewActor);
-	if (AICharacter)
-	{
-		// TODO 
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Detected"));
-	}
-
-	return bHit;
+	return nullptr;
 }

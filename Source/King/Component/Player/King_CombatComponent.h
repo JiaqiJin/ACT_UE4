@@ -10,6 +10,7 @@
 class UKing_AbilitySystemComponent;
 class UKing_GameplayAbility;
 class AKingCharacter;
+class AAI_CharacterBase;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class KING_API UKing_CombatComponent : public UActorComponent
@@ -25,6 +26,9 @@ public:
 	// Check if enemy is in front of the player
 	UFUNCTION()
 	bool IsEnemyInFront();
+
+	UFUNCTION()
+	AAI_CharacterBase* GetInFrontAICharacter();
 
 	UFUNCTION()
 	void RegisterCombatAttack(FSimpleCombatCheck& InCombatCheck, const FName& InKey);
