@@ -54,6 +54,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayTag")
 	FGameplayTag EventAbilityTag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash Setting")
+	float DashDistance = 7000.0f;
 protected:
 
 	bool bIsCreateOnRunning = false;
