@@ -44,7 +44,6 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 
-	// https://forums.unrealengine.com/t/how-to-tell-if-something-is-in-front-of-the-player-and-if-so-by-how-much/487541
 	UFUNCTION()
 	bool IsPlayerInFront();
 	// Getters
